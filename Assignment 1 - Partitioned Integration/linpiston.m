@@ -50,7 +50,7 @@ M_mono = inv(L_mono)*R_mono;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Partitioned sequential Structure-Fluid
 W_seqsf = W0;
-L_seqsf = 1; % Added this line of code to trial Matlab Git integration
+L_seqsf = 0; % Added this line of code to trial Matlab Git integration
 R_seqsf = 
 M_seqsf = inv(L_seqsf)*R_seqsf;
 
