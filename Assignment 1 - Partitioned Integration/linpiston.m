@@ -12,13 +12,13 @@ k = 1;
 
 % Time step size and number of time steps
 dt    = 0.1;
-Ndt   = 100;
+Ndt   = 1000;
 
 % Integration method:
 %   theta = 0   : first order explicit Euler
 %   theta = 1/2 : second order trapezoidal rule
 %   theta = 1   : first order implicit Euler
-theta = 0.0;
+theta = 0.5;
 
 % spatial discretization:
 % 
@@ -48,22 +48,29 @@ M_mono = inv(L_mono)*R_mono;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% FILL IN THE PARTITIONG SCHEMES BELOW      %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+I = eye(2*N + 2);
 % Partitioned sequential Structure-Fluid
 W_seqsf = W0;
-L_seqsf = 
-R_seqsf = 
+L_seqsf = I - theta * dt * [As zeros(2,2*N)
+                            Afs Af];
+R_seqsf = I + (1 - theta) * dt * [zeros(2) Asf
+                                  zeros(2*N,2) zeros(2*N)];
 M_seqsf = inv(L_seqsf)*R_seqsf;
 
 % Partitioned sequential Fluid-Structure
 W_seqfs = W0;
-L_seqfs = 
-R_seqfs = 
+L_seqfs = I - theta * dt * [As Asf
+                            zeros(2*N,2) Af];
+R_seqfs = I + (1 - theta) * dt * [zeros(2) zeros(2,2*N)
+                                  Afs zeros(2*N)]; 
 M_seqfs = inv(L_seqfs)*R_seqfs;
 
 % Partitioned parallel
 W_par = W0;
-L_par = 
-R_par = 
+L_par = I - theta * dt * [As zeros(2,2*N)
+                          zeros(2*N,2)  Af];
+R_par = I + (1 - theta) * dt * [zeros(2) Asf
+                                Afs  zeros(2*N)];
 M_par = inv(L_par)*R_par;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
